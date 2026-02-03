@@ -11,6 +11,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "TunisLink - The Future of Tunisian B2B Project Sharing",
   description: "Connecting local visionaries. Join the exclusive waitlist for early access to the premier platform for Tunisian company owners.",
+  icons: {
+    icon: "/TLink-logo.svg",
+  },
 };
 
 export default function RootLayout({

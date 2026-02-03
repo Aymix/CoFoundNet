@@ -1,0 +1,3 @@
+31.97.193.81 {
+    reverse_proxy localhost:3000
+}
