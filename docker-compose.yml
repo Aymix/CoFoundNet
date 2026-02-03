@@ -9,4 +9,4 @@ services:
       - MONGODB_URI=${MONGODB_URI}
     restart: always
     ports:
-      - "3000:3000"
+      - "3001:3002"
