@@ -1,4 +1,19 @@
+"use client";
+
+import { useState } from "react";
+
 export default function Home() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim() && email.includes("@")) {
+      setIsSubmitted(true);
+      // In a real app, you would send the email to your backend here
+    }
+  };
+
   return (
     <div className="flex min-h-screen w-full flex-col lg:flex-row group/design-root">
       {/* Left Section - Content */}
@@ -43,7 +58,7 @@ export default function Home() {
               Networking
             </h1>
 
-            {/* Feature Steps with Curved Connectors */}
+            {/* Feature Steps - Restored accurately with curved connectors */}
             <div className="flex items-start justify-between w-full max-w-[580px] py-10 px-0 relative select-none">
               {/* Connector Arrows */}
               <div className="absolute inset-0 z-0 pointer-events-none overflow-visible">
@@ -120,27 +135,41 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Email Form */}
+            {/* Email Form with Success Animation */}
             <div className="w-full relative group max-w-[520px]">
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
-              <label className="relative flex flex-col sm:flex-row w-full bg-white dark:bg-[#1a2632] p-2 rounded-[2rem] shadow-xl shadow-primary/5 border border-[#dbe0e6] dark:border-gray-700">
+              <div className={`absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur transition duration-1000 ${isSubmitted ? 'opacity-40 animate-pulse' : 'opacity-20 group-hover:opacity-30'}`}></div>
+              <form
+                onSubmit={handleSubmit}
+                className={`relative flex flex-col sm:flex-row w-full bg-white dark:bg-[#1a2632] p-2 rounded-[2rem] shadow-xl shadow-primary/5 border border-[#dbe0e6] dark:border-gray-700 transition-all duration-500 ${isSubmitted ? 'scale-95 opacity-90' : ''}`}
+              >
                 <div className="flex flex-1 items-center px-4 h-12 sm:h-14">
-                  <span className="material-symbols-outlined text-[#617589] text-[22px]">mail</span>
+                  <span className="material-symbols-outlined text-[#617589] text-[22px]">{isSubmitted ? 'check_circle' : 'mail'}</span>
                   <input
                     className="flex-1 w-full bg-transparent border-none outline-none focus:ring-0 px-3 text-[#111418] dark:text-white placeholder:text-[#9aa6b2] text-base"
-                    placeholder="Enter your business email..."
+                    placeholder={isSubmitted ? "You're on the list!" : "Enter your business email..."}
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isSubmitted}
                   />
                 </div>
-                <button className="mt-2 sm:mt-0 w-full sm:w-auto flex items-center justify-center gap-2 bg-primary hover:bg-blue-600 text-white h-12 sm:h-14 px-8 rounded-full font-bold text-sm tracking-wide transition-all duration-200 transform active:scale-95 shadow-lg shadow-primary/20">
-                  <span>Get Early Access</span>
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                <button
+                  type="submit"
+                  disabled={isSubmitted}
+                  className={`mt-2 sm:mt-0 w-full sm:w-auto flex items-center justify-center gap-2 h-12 sm:h-14 px-8 rounded-full font-bold text-sm tracking-wide transition-all duration-300 transform active:scale-95 ${isSubmitted ? 'bg-green-500 border-2 border-green-600 text-white cursor-default scale-100' : 'bg-primary hover:bg-blue-600 text-white shadow-lg shadow-primary/20'}`}
+                >
+                  <span>{isSubmitted ? 'Welcome Aboard' : 'Get Early Access'}</span>
+                  <span className={`material-symbols-outlined text-[18px] transition-transform duration-500 ${isSubmitted ? 'rotate-[360deg]' : ''}`}>
+                    {isSubmitted ? 'celebration' : 'arrow_forward'}
+                  </span>
                 </button>
-              </label>
+              </form>
+
+
             </div>
 
             {/* Social Proof */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+            <div className={`flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2 transition-opacity duration-500 ${isSubmitted ? 'opacity-60' : 'opacity-100'}`}>
               <div className="flex -space-x-3">
                 <div className="w-10 h-10 rounded-full border-2 border-white dark:border-[#101922] bg-gray-200 flex items-center justify-center overflow-hidden">
                   <span className="material-symbols-outlined text-gray-400 text-sm">person</span>
@@ -156,7 +185,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-[#617589] dark:text-slate-500 text-sm font-medium">
-                Join 500+ Tunisian company owners waiting for launch.
+                {isSubmitted ? 'Join 501 Tunisian company owners...' : 'Join 500+ Tunisian company owners waiting for launch.'}
               </p>
             </div>
 
@@ -214,7 +243,7 @@ export default function Home() {
             <circle cx="200" cy="50" fill="#E07A5F" r="4"></circle>
             <path d="M20 560 L380 560" opacity="0.2" stroke="#137fec" strokeWidth="1"></path>
           </svg>
-          <div className="mt-8 text-center flex flex-col gap-1">
+          <div className="text-center flex flex-col gap-1">
             <p className="text-primary font-bold tracking-[0.2em] uppercase text-xs">Innovation Roots</p>
             <p className="text-[#617589] dark:text-slate-400 text-sm italic">Inspired by Sidi Bou Said architecture</p>
           </div>
