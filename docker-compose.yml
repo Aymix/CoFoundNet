@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
+      - MONGODB_URI=${MONGODB_URI}
     restart: always
     expose:
       - "3000"

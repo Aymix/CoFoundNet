@@ -6,11 +6,28 @@ export default function Home() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim() && email.includes("@")) {
-      setIsSubmitted(true);
-      // In a real app, you would send the email to your backend here
+      try {
+        const response = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        if (response.ok) {
+          setIsSubmitted(true);
+        } else {
+          const data = await response.json();
+          alert(data.error || "Something went wrong. Please try again.");
+        }
+      } catch (error) {
+        console.error("Submission error:", error);
+        alert("Failed to join waitlist. Please check your connection.");
+      }
     }
   };
 
@@ -30,7 +47,7 @@ export default function Home() {
               </div>
               <div className="flex flex-col justify-center">
                 <div className="flex items-baseline leading-none gap-[1px]">
-                  <span className="text-[#101922] dark:text-white text-3xl font-bold tracking-tight">Tunis</span>
+                  <span className="text-[#101922] dark:text-white text-3xl font-bold tracking-tight">Tunisie</span>
                   <span className="text-primary text-3xl font-normal tracking-wide">Link</span>
                 </div>
                 <span className="text-[#101922] dark:text-slate-300 text-lg font-medium tracking-wide mt-1" dir="rtl" style={{ fontFamily: "'Noto Sans', sans-serif" }}>تونس لينك</span>
@@ -58,92 +75,22 @@ export default function Home() {
               Networking
             </h1>
 
-            {/* Feature Steps - Restored accurately with curved connectors */}
-            <div className="flex items-start justify-between w-full max-w-[580px] py-10 px-0 relative select-none">
-              {/* Connector Arrows */}
-              <div className="absolute inset-0 z-0 pointer-events-none overflow-visible">
-                {/* Arrow 1 */}
-                <svg className="absolute w-[20%] h-12 left-[12%] top-[0px] text-gray-300 dark:text-gray-600" fill="none" preserveAspectRatio="none" viewBox="0 0 100 40">
-                  <path d="M0,35 Q50,-10 95,30" stroke="currentColor" strokeDasharray="4 4" strokeWidth="1.5" />
-                  <path d="M92,25 L97,32 L88,33" fill="currentColor" />
-                </svg>
-                {/* Arrow 2 */}
-                <svg className="absolute w-[20%] h-12 left-[32%] top-[0px] text-gray-300 dark:text-gray-600" fill="none" preserveAspectRatio="none" viewBox="0 0 100 40">
-                  <path d="M0,35 Q50,-10 95,30" stroke="currentColor" strokeDasharray="4 4" strokeWidth="1.5" />
-                  <path d="M92,25 L97,32 L88,33" fill="currentColor" />
-                </svg>
-                {/* Arrow 3 */}
-                <svg className="absolute w-[20%] h-12 left-[52%] top-[0px] text-gray-300 dark:text-gray-600" fill="none" preserveAspectRatio="none" viewBox="0 0 100 40">
-                  <path d="M0,35 Q50,-10 95,30" stroke="currentColor" strokeDasharray="4 4" strokeWidth="1.5" />
-                  <path d="M92,25 L97,32 L88,33" fill="currentColor" />
-                </svg>
-                {/* Arrow 4 */}
-                <svg className="absolute w-[20%] h-12 left-[72%] top-[0px] text-gray-300 dark:text-gray-600" fill="none" preserveAspectRatio="none" viewBox="0 0 100 40">
-                  <path d="M0,35 Q50,-10 95,30" stroke="currentColor" strokeDasharray="4 4" strokeWidth="1.5" />
-                  <path d="M92,25 L97,32 L88,33" fill="currentColor" />
-                </svg>
-              </div>
-
-              <div className="group flex flex-col items-center gap-3 relative z-10 w-1/5 cursor-pointer">
-                <div className="size-12 rounded-full bg-white dark:bg-[#1a2632] border border-gray-200 dark:border-gray-700 group-hover:border-primary group-hover:bg-primary/5 flex items-center justify-center text-gray-400 group-hover:text-primary transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:-translate-y-1">
-                  <span className="material-symbols-outlined text-[22px]">edit_note</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-0.5 transition-all duration-300 group-hover:transform group-hover:scale-105">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-gray-900 dark:text-white group-hover:text-primary">Join</span>
-                  <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400">Waitlist</span>
-                </div>
-              </div>
-
-              <div className="group flex flex-col items-center gap-3 relative z-10 w-1/5 cursor-pointer">
-                <div className="size-12 rounded-full bg-white dark:bg-[#1a2632] border border-gray-200 dark:border-gray-700 group-hover:border-primary group-hover:bg-primary/5 flex items-center justify-center text-gray-400 group-hover:text-primary transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:-translate-y-1">
-                  <span className="material-symbols-outlined text-[22px]">verified_user</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-0.5 transition-all duration-300 group-hover:transform group-hover:scale-105">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-gray-900 dark:text-white group-hover:text-primary">Profile</span>
-                  <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400">Verify</span>
-                </div>
-              </div>
-
-              <div className="group flex flex-col items-center gap-3 relative z-10 w-1/5 cursor-pointer">
-                <div className="size-12 rounded-full bg-white dark:bg-[#1a2632] border border-gray-200 dark:border-gray-700 group-hover:border-primary group-hover:bg-primary/5 flex items-center justify-center text-gray-400 group-hover:text-primary transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:-translate-y-1">
-                  <span className="material-symbols-outlined text-[22px]">handshake</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-0.5 transition-all duration-300 group-hover:transform group-hover:scale-105">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-gray-900 dark:text-white group-hover:text-primary">Match</span>
-                  <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400">AI Partner</span>
-                </div>
-              </div>
-
-              <div className="group flex flex-col items-center gap-3 relative z-10 w-1/5 cursor-pointer">
-                <div className="size-12 rounded-full bg-white dark:bg-[#1a2632] border border-gray-200 dark:border-gray-700 group-hover:border-primary group-hover:bg-primary/5 flex items-center justify-center text-gray-400 group-hover:text-primary transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:-translate-y-1">
-                  <span className="material-symbols-outlined text-[22px]">folder_shared</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-0.5 transition-all duration-300 group-hover:transform group-hover:scale-105">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-gray-900 dark:text-white group-hover:text-primary">Collaborate</span>
-                  <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400">Sharing</span>
-                </div>
-              </div>
-
-              <div className="group flex flex-col items-center gap-3 relative z-10 w-1/5 cursor-pointer">
-                <div className="size-12 rounded-full bg-white dark:bg-[#1a2632] border border-gray-200 dark:border-gray-700 group-hover:border-primary group-hover:bg-primary/5 flex items-center justify-center text-gray-400 group-hover:text-primary transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:-translate-y-1">
-                  <span className="material-symbols-outlined text-[22px]">trending_up</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-0.5 transition-all duration-300 group-hover:transform group-hover:scale-105">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-gray-900 dark:text-white group-hover:text-primary">Grow</span>
-                  <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400">Scale Up</span>
-                </div>
-              </div>
-            </div>
 
             {/* Email Form with Success Animation */}
             <div className="w-full relative group max-w-[520px]">
-              <div className={`absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur transition duration-1000 ${isSubmitted ? 'opacity-40 animate-pulse' : 'opacity-20 group-hover:opacity-30'}`}></div>
+              <div
+                className={`absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur transition duration-1000 ${isSubmitted ? "opacity-40 animate-pulse" : "opacity-20 group-hover:opacity-30"
+                  }`}
+              ></div>
               <form
                 onSubmit={handleSubmit}
-                className={`relative flex flex-col sm:flex-row w-full bg-white dark:bg-[#1a2632] p-2 rounded-[2rem] shadow-xl shadow-primary/5 border border-[#dbe0e6] dark:border-gray-700 transition-all duration-500 ${isSubmitted ? 'scale-95 opacity-90' : ''}`}
+                className={`relative flex flex-col sm:flex-row w-full bg-white dark:bg-[#1a2632] p-2 rounded-[2rem] shadow-xl shadow-primary/5 border border-[#dbe0e6] dark:border-gray-700 transition-all duration-500 ${isSubmitted ? "scale-95 opacity-90" : ""
+                  }`}
               >
                 <div className="flex flex-1 items-center px-4 h-12 sm:h-14">
-                  <span className="material-symbols-outlined text-[#617589] text-[22px]">{isSubmitted ? 'check_circle' : 'mail'}</span>
+                  <span className="material-symbols-outlined text-[#617589] text-[22px]">
+                    {isSubmitted ? "check_circle" : "mail"}
+                  </span>
                   <input
                     className="flex-1 w-full bg-transparent border-none outline-none focus:ring-0 px-3 text-[#111418] dark:text-white placeholder:text-[#9aa6b2] text-base"
                     placeholder={isSubmitted ? "You're on the list!" : "Enter your business email..."}
@@ -156,16 +103,20 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isSubmitted}
-                  className={`mt-2 sm:mt-0 w-full sm:w-auto flex items-center justify-center gap-2 h-12 sm:h-14 px-8 rounded-full font-bold text-sm tracking-wide transition-all duration-300 transform active:scale-95 ${isSubmitted ? 'bg-green-500 border-2 border-green-600 text-white cursor-default scale-100' : 'bg-primary hover:bg-blue-600 text-white shadow-lg shadow-primary/20'}`}
+                  className={`mt-2 sm:mt-0 w-full sm:w-auto flex items-center justify-center gap-2 h-12 sm:h-14 px-8 rounded-full font-bold text-sm tracking-wide transition-all duration-300 transform active:scale-95 ${isSubmitted
+                    ? "bg-green-500 border-2 border-green-600 text-white cursor-default scale-100"
+                    : "bg-primary hover:bg-blue-600 text-white shadow-lg shadow-primary/20"
+                    }`}
                 >
-                  <span>{isSubmitted ? 'Welcome Aboard' : 'Get Early Access'}</span>
-                  <span className={`material-symbols-outlined text-[18px] transition-transform duration-500 ${isSubmitted ? 'rotate-[360deg]' : ''}`}>
-                    {isSubmitted ? 'celebration' : 'arrow_forward'}
+                  <span>{isSubmitted ? "Welcome Aboard" : "Get Early Access"}</span>
+                  <span
+                    className={`material-symbols-outlined text-[18px] transition-transform duration-500 ${isSubmitted ? "rotate-[360deg]" : ""
+                      }`}
+                  >
+                    {isSubmitted ? "celebration" : "arrow_forward"}
                   </span>
                 </button>
               </form>
-
-
             </div>
 
             {/* Social Proof */}
