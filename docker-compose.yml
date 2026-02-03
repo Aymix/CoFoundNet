@@ -1,10 +1,24 @@
 services:
-  app:
+  cofoundnet:
+    container_name: CoFoundNet
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000" # Traefik will handle routing, no need to expose port 3000 directly
     environment:
       - NODE_ENV=production
     restart: always
+    labels:
+      - "traefik.enable=true"
+      # REPLACE 'tunislink.localhost' with your actual domain
+      - "traefik.http.routers.tunislink.rule=Host(`tunislink.localhost`)"
+      - "traefik.http.routers.tunislink.entrypoints=web"
+      - "traefik.http.services.tunislink.loadbalancer.server.port=3000"
+    networks:
+      - traefik_public
+      - default
+
+networks:
+  traefik_public:
+    external: true # Assumes you have an existing network named 'traefik_public'
