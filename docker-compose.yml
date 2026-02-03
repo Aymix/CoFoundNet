@@ -4,20 +4,27 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # ports:
-    #   - "3000:3000" # Traefik will handle routing, no need to expose port 3000 directly
     environment:
       - NODE_ENV=production
     restart: always
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.cofoundnet.rule=Host(`31.97.193.81`)"
-      - "traefik.http.routers.cofoundnet.entrypoints=web"
-      - "traefik.http.services.cofoundnet.loadbalancer.server.port=3000"
+    expose:
+      - "3000"
     networks:
-      - traefik_public
-      - default
+      - cofoundnet_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: CoFoundNet_Nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - cofoundnet
+    restart: always
+    networks:
+      - cofoundnet_network
 
 networks:
-  traefik_public:
-    external: true # Assumes you have an existing network named 'traefik_public'
+  cofoundnet_network:
+    driver: bridge
