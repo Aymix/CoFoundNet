@@ -11,10 +11,9 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      # REPLACE 'tunislink.localhost' with your actual domain
-      - "traefik.http.routers.tunislink.rule=Host(`tunislink.localhost`)"
-      - "traefik.http.routers.tunislink.entrypoints=web"
-      - "traefik.http.services.tunislink.loadbalancer.server.port=3000"
+      - "traefik.http.routers.cofoundnet.rule=Host(`31.97.193.81`)"
+      - "traefik.http.routers.cofoundnet.entrypoints=web"
+      - "traefik.http.services.cofoundnet.loadbalancer.server.port=3000"
     networks:
       - traefik_public
       - default
